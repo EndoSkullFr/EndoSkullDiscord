@@ -26,22 +26,22 @@ public class ReactListener implements EventListener {
                         BungeeAddon.getInstance().getWaitingReact().remove(message);
                         Candidature.getHelperCandidating().put(member.getIdLong(), 0);
                         Candidature.getHelperChannel().put(member.getIdLong(), e.getChannel().getIdLong());
-                        e.getChannel().sendMessage(Candidature.getHelperEmbed(member.getIdLong())).queue();
+                        e.getChannel().sendMessageEmbeds(Candidature.getHelperEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("⚡")) {
                         BungeeAddon.getInstance().getWaitingReact().remove(message);
                         Candidature.getBuilderCandidating().put(member.getIdLong(), 0);
                         Candidature.getBuilderChannel().put(member.getIdLong(), e.getChannel().getIdLong());
-                        e.getChannel().sendMessage(Candidature.getBuilderEmbed(member.getIdLong())).queue();
+                        e.getChannel().sendMessageEmbeds(Candidature.getBuilderEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("⚙")) {
                         BungeeAddon.getInstance().getWaitingReact().remove(message);
                         Candidature.getDevCandidating().put(member.getIdLong(), 0);
                         Candidature.getDevChannel().put(member.getIdLong(), e.getChannel().getIdLong());
-                        e.getChannel().sendMessage(Candidature.getDevEmbed(member.getIdLong())).queue();
+                        e.getChannel().sendMessageEmbeds(Candidature.getDevEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("🎨")) {
                         BungeeAddon.getInstance().getWaitingReact().remove(message);
                         Candidature.getGraphistCandidating().put(member.getIdLong(), 0);
                         Candidature.getGraphistChannel().put(member.getIdLong(), e.getChannel().getIdLong());
-                        e.getChannel().sendMessage(Candidature.getGraphistEmbed(member.getIdLong())).queue();
+                        e.getChannel().sendMessageEmbeds(Candidature.getGraphistEmbed(member.getIdLong())).queue();
                     }
                 }
             }
@@ -52,19 +52,19 @@ public class ReactListener implements EventListener {
             long memberId = e.getMember().getIdLong();
             if (Candidature.getHelperCandidating().containsKey(memberId) && e.getChannel().getIdLong() == Candidature.getHelperChannel().get(memberId)) {
                 Candidature.getHelperCandidating().put(memberId, Candidature.getHelperCandidating().get(memberId) + 1);
-                e.getChannel().sendMessage(Candidature.getHelperEmbed(memberId)).queue();
+                e.getChannel().sendMessageEmbeds(Candidature.getHelperEmbed(memberId)).queue();
             }
             if (Candidature.getBuilderCandidating().containsKey(memberId) && e.getChannel().getIdLong() == Candidature.getBuilderChannel().get(memberId)) {
                 Candidature.getBuilderCandidating().put(memberId, Candidature.getBuilderCandidating().get(memberId) + 1);
-                e.getChannel().sendMessage(Candidature.getBuilderEmbed(memberId)).queue();
+                e.getChannel().sendMessageEmbeds(Candidature.getBuilderEmbed(memberId)).queue();
             }
             if (Candidature.getDevCandidating().containsKey(memberId) && e.getChannel().getIdLong() == Candidature.getDevChannel().get(memberId)) {
                 Candidature.getDevCandidating().put(memberId, Candidature.getDevCandidating().get(memberId) + 1);
-                e.getChannel().sendMessage(Candidature.getDevEmbed(memberId)).queue();
+                e.getChannel().sendMessageEmbeds(Candidature.getDevEmbed(memberId)).queue();
             }
             if (Candidature.getGraphistCandidating().containsKey(memberId) && e.getChannel().getIdLong() == Candidature.getGraphistChannel().get(memberId)) {
                 Candidature.getGraphistCandidating().put(memberId, Candidature.getGraphistCandidating().get(memberId) + 1);
-                e.getChannel().sendMessage(Candidature.getGraphistEmbed(memberId)).queue();
+                e.getChannel().sendMessageEmbeds(Candidature.getGraphistEmbed(memberId)).queue();
             }
         }
     }

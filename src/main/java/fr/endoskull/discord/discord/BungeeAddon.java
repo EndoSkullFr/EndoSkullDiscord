@@ -3,7 +3,9 @@ package fr.endoskull.discord.discord;
 import fr.endoskull.api.commons.account.Account;
 import fr.endoskull.api.commons.account.AccountProvider;
 import fr.endoskull.discord.Main;
+import fr.endoskull.discord.listeners.DiscordJoinListener;
 import fr.endoskull.discord.listeners.ReactListener;
+import fr.endoskull.discord.listeners.SlashCommandListener;
 import fr.endoskull.discord.utils.Candidature;
 import fr.endoskull.discord.utils.WaitingLink;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,7 +21,6 @@ import org.spicord.bot.command.DiscordBotCommand;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class BungeeAddon extends SimpleAddon {
@@ -47,6 +48,8 @@ public class BungeeAddon extends SimpleAddon {
         prefix = bot.getCommandPrefix();
         enableCommands();
         bot.getJda().addEventListener(new ReactListener());
+        bot.getJda().addEventListener(new DiscordJoinListener());
+        bot.getJda().addEventListener(new SlashCommandListener());
     }
 
     private void enableCommands() {
@@ -54,20 +57,21 @@ public class BungeeAddon extends SimpleAddon {
         bot.onCommand("minecraft", this::minecraftCommand);
         bot.onCommand("discord", this::discordCommand);
         bot.onCommand("candidature", this::candidatureCommand);
+        //bot.getJda().upsertCommand("ping", "Obtenir la latence du bot").queue();
     }
 
     private void candidatureCommand(DiscordBotCommand command) {
         User user = command.getMessage().getAuthor();
-        Category category = command.getChannel().getParent();
+        Category category = command.getChannel().getParentCategory();
         if (category == null || category.getIdLong() != 823551934669651968L) {
-            command.getChannel().sendMessage(new EmbedBuilder().setDescription("Pour faire une candidature, vous devez être dans le channel d'un ticket").setColor(Color.RED).build()).queue();
+            command.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("Pour faire une candidature, vous devez être dans le channel d'un ticket").setColor(Color.RED).build()).queue();
             return;
         }
         if (Candidature.getHelperCandidating().containsKey(user.getIdLong()) || Candidature.getBuilderCandidating().containsKey(user.getIdLong()) || Candidature.getDevCandidating().containsKey(user.getIdLong()) || Candidature.getGraphistCandidating().containsKey(user.getIdLong())) {
-            command.getChannel().sendMessage(new EmbedBuilder().setDescription("Vous avez déjà une candidature en cours").setColor(Color.RED).build()).queue();
+            command.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("Vous avez déjà une candidature en cours").setColor(Color.RED).build()).queue();
             return;
         }
-        command.getChannel().sendMessage(new EmbedBuilder().setTitle("Recrutements").setDescription("Bonjour " + user.getName() + ", pour quelle catégorie souhaitez-vous postuler ?\n\n🏹 Modération\n⚡ Build\n⚙ Développement\n🎨 Graphisme").setColor(Color.green).setThumbnail("https://www.univ-tours.fr/medias/photo/resume-freepik_1540214642628-png?ID_FICHE=291341").build()).queue(message -> {
+        command.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle("Recrutements").setDescription("Bonjour " + user.getName() + ", pour quelle catégorie souhaitez-vous postuler ?\n\n🏹 Modération\n⚡ Build\n⚙ Développement\n🎨 Graphisme").setColor(Color.green).setThumbnail("https://www.univ-tours.fr/medias/photo/resume-freepik_1540214642628-png?ID_FICHE=291341").build()).queue(message -> {
             message.addReaction("🏹").queue();
             message.addReaction("⚡").queue();
             message.addReaction("⚙").queue();
@@ -86,7 +90,7 @@ public class BungeeAddon extends SimpleAddon {
             if(msg.split(" ").length == 1) {
                 return;
             } else {
-                command.getChannel().sendMessage(new EmbedBuilder().setDescription("Cette fonctionnalité est désativé temporairement").setColor(Color.GREEN).build()).queue();
+                command.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("Cette fonctionnalité est désativé temporairement").setColor(Color.GREEN).build()).queue();
                 /*String targeId = msg.split(" ")[1];
                 List<String> accounts = SQLManager.getMinecraftAccountsByDiscordId(targeId);
                 if (accounts.isEmpty()) {
@@ -108,7 +112,7 @@ public class BungeeAddon extends SimpleAddon {
             if(msg.split(" ").length == 1) {
                 return;
             } else {
-                command.getChannel().sendMessage(new EmbedBuilder().setDescription("Cette fonctionnalité est désactivé temporairement").setColor(Color.RED).build()).queue();
+                command.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("Cette fonctionnalité est désactivé temporairement").setColor(Color.RED).build()).queue();
                 /*String account = msg.split(" ")[1];
                 String discordId = SQLManager.getDiscordIdByMinecraftAccount(account);
                 if (discordId == null || discordId.length() < 10) {
@@ -124,19 +128,19 @@ public class BungeeAddon extends SimpleAddon {
         User user = command.getMessage().getAuthor();
         String msg = command.getMessage().getContentRaw();
         if(msg.split(" ").length == 1) {
-            command.getChannel().sendMessage(new EmbedBuilder().setTitle("Utilisation").setDescription("-link <Pseudo>").setColor(Color.RED).build()).queue();
+            command.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle("Utilisation").setDescription("-link <Pseudo>").setColor(Color.RED).build()).queue();
         } else {
             ProxiedPlayer player = plugin.getProxy().getPlayer(msg.split(" ")[1]);
             if (player == null) {
-                command.getChannel().sendMessage(new EmbedBuilder().setTitle("Erreur").setDescription("Ce joueur n'est pas connecté").setColor(Color.RED).build()).queue();
+                command.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle("Erreur").setDescription("Ce joueur n'est pas connecté").setColor(Color.RED).build()).queue();
             } else {
                 Account account = AccountProvider.getAccount(player.getUniqueId());
                 if (!account.getProperty("discord", "none").equalsIgnoreCase("none")) {
-                    command.getChannel().sendMessage(new EmbedBuilder().setTitle("Erreur").setDescription("Ce compte minecraft est déjà relié avec un compte discord").setColor(Color.RED).build()).queue();
+                    command.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle("Erreur").setDescription("Ce compte minecraft est déjà relié avec un compte discord").setColor(Color.RED).build()).queue();
                     return;
                 }
                 String random = getRandomNumber();
-                command.getChannel().sendMessage(new EmbedBuilder().setTitle("Validation").setDescription("Pour confirmer la liaison entre votre compte discord et minecraft faîtes\n`/link " + random + "`\nAttention une fois ceci fait vous ne pourrez plus changer le compte discord lié à votre compte minecraft sur EndoSkull").setColor(Color.GREEN).build()).queue();
+                command.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle("Validation").setDescription("Pour confirmer la liaison entre votre compte discord et minecraft faîtes\n`/link " + random + "`\nAttention une fois ceci fait vous ne pourrez plus changer le compte discord lié à votre compte minecraft sur EndoSkull").setColor(Color.GREEN).build()).queue();
                 waitingLinks.put(user.getId(), new WaitingLink(user.getId(), System.currentTimeMillis() + 1000*60*5, player.getUniqueId(), random));
             }
         }

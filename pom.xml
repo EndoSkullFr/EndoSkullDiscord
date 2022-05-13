@@ -66,9 +66,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spicord</groupId>
+            <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.1</version>
+            <version>5.0.0-alpha.11</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

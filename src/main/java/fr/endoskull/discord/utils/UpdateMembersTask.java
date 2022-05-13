@@ -9,12 +9,14 @@ import net.dv8tion.jda.api.entities.Guild;
 public class UpdateMembersTask implements Runnable {
     @Override
     public void run() {
-        BungeeAddon addon = BungeeAddon.getInstance();
+        /*BungeeAddon addon = BungeeAddon.getInstance();
         Guild guild = addon.getBot().getJda().getGuildById("819973375903531009");
 
         guild.retrieveMetaData()
                 .map(Guild.MetaData::getApproximateMembers)
-                .queue(integer -> MySQL.getInstance().update("INSERT INTO `discord_count`(`members`) VALUES ('" + integer + "')"));
+                .queue(integer -> MySQL.getInstance().update("INSERT INTO `discord_count`(`members`) VALUES ('" + integer + "')"));*/
+
+        MySQL.getInstance().update("INSERT INTO `discord_count`(`members`) VALUES ('" + Main.getInstance().getMemberCount() + "')");
 
         //final int memberCount = guild.getMemberCount();
         //MySQL.getInstance().update("INSERT INTO `discord_count`(`members`) VALUES ('" + memberCount + "')");
