@@ -3,7 +3,6 @@ package fr.endoskull.discord.commands;
 import fr.endoskull.api.commons.account.Account;
 import fr.endoskull.api.commons.account.AccountProvider;
 import fr.endoskull.discord.Main;
-import fr.endoskull.discord.discord.BungeeAddon;
 import fr.endoskull.discord.utils.WaitingLink;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -33,18 +32,17 @@ public class LinkDiscordCommand extends Command {
             return;
         }
         String code = args[0];
-        BungeeAddon addon = BungeeAddon.getInstance();
-        for (String s : new ArrayList<>(addon.getWaitingLinks().keySet())) {
-            WaitingLink waitingLink = addon.getWaitingLinks().get(s);
+        for (String s : new ArrayList<>(Main.getInstance().getWaitingLinks().keySet())) {
+            WaitingLink waitingLink = Main.getInstance().getWaitingLinks().get(s);
             if (waitingLink.getExpiry() < System.currentTimeMillis()) {
-                addon.getWaitingLinks().remove(s);
+                Main.getInstance().getWaitingLinks().remove(s);
                 continue;
             }
             if (waitingLink.getUuid().equals(player.getUniqueId())) {
                 if (code.equalsIgnoreCase(waitingLink.getCode())) {
                     account.setProperty("discord", waitingLink.getDiscordId());
                     player.sendMessage("§aVotre compte minecraft a été relié avec succès à votre compte discord !");
-                    addon.getWaitingLinks().remove(s);
+                    Main.getInstance().getWaitingLinks().remove(s);
                 } else {
                     player.sendMessage("§cCode invalide !");
                 }

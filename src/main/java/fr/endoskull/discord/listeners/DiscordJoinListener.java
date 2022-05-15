@@ -4,6 +4,8 @@ import fr.endoskull.discord.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -19,8 +21,9 @@ public class DiscordJoinListener implements EventListener {
         if (genericEvent instanceof GuildMemberJoinEvent) {
             GuildMemberJoinEvent e = (GuildMemberJoinEvent) genericEvent;
             Main.getInstance().setMemberCount(Main.getInstance().getMemberCount() + 1);
+            Main.getInstance().updateMemberCount();
             Member member = e.getMember();
-            MessageChannel channel = e.getJDA().getTextChannelById(820585969086496788l);
+            TextChannel channel = e.getJDA().getTextChannelById("820585969086496788");
             channel.sendMessageEmbeds(new EmbedBuilder().setTitle("Nouvelle arrivant !").setColor(Color.decode("#2ECC71")).setThumbnail(member.getUser().getAvatarUrl()).setDescription("Bienvenue" + member.getAsMention() + " sur EndoSkull, avant de commencer à parler nous t'invitons à jeter un coup d'oeil au <#819973376340525116>").setTimestamp(new Date().toInstant()).build()).queue();
             if (member.getUser().hasPrivateChannel()) {
                 member.getUser().openPrivateChannel()
@@ -31,9 +34,10 @@ public class DiscordJoinListener implements EventListener {
         if (genericEvent instanceof GuildMemberRemoveEvent) {
             GuildMemberRemoveEvent e = (GuildMemberRemoveEvent) genericEvent;
             Main.getInstance().setMemberCount(Main.getInstance().getMemberCount() - 1);
-            Member member = e.getMember();
-            MessageChannel channel = e.getJDA().getTextChannelById(820585969086496788l);
-            channel.sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setDescription("C'est en ce triste jour qu'est survenu le départ du combattant " + member.getAsMention() + " :'(").build()).queue();
+            Main.getInstance().updateMemberCount();
+            User user = e.getUser();
+            TextChannel channel = e.getJDA().getTextChannelById("820585969086496788");
+            channel.sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setDescription("C'est en ce triste jour qu'est survenu le départ du combattant " + user.getAsMention() + " :'(").build()).queue();
         }
     }
 }

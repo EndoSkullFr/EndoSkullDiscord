@@ -1,6 +1,6 @@
 package fr.endoskull.discord.utils;
 
-import fr.endoskull.api.BungeeMain;
+import fr.endoskull.api.data.sql.MySQL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class SQLManager {
 
     public static List<String> getMinecraftAccountsByDiscordId(String id) {
         List<String> result = new ArrayList<>();
-        BungeeMain.getInstance().getMySQL().query("SELECT name FROM accounts WHERE discord='" + id + "'", rs -> {
+        MySQL.getInstance().query("SELECT `name` FROM `accounts` WHERE `uuid`=(SELECT `uuid` FROM `properties` WHERE `key`='discord' AND `value`='" + id + "' LIMIT 1)", rs -> {
             try {
                 while (rs.next()) {
                     result.add(rs.getString("name"));
@@ -25,10 +25,10 @@ public class SQLManager {
 
     public static String getDiscordIdByMinecraftAccount(String id) {
         AtomicReference<String> result = new AtomicReference<>("");
-        BungeeMain.getInstance().getMySQL().query("SELECT discord FROM accounts WHERE name='" + id + "'", rs -> {
+        MySQL.getInstance().query("SELECT `value` FROM `properties` WHERE `key`='discord' AND`uuid`=(SELECT `uuid` FROM `accounts` WHERE `name`='" + id + "' LIMIT 1);", rs -> {
             try {
                 while (rs.next()) {
-                    result.set(rs.getString("discord"));
+                    result.set(rs.getString("value"));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();

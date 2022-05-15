@@ -60,16 +60,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spicord</groupId>
-            <artifactId>spicord-common</artifactId>
-            <version>4.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>5.0.0-alpha.11</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>

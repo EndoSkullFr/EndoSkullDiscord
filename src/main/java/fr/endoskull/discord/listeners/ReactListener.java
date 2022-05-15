@@ -1,15 +1,14 @@
 package fr.endoskull.discord.listeners;
 
-import fr.endoskull.discord.discord.BungeeAddon;
+
+import fr.endoskull.discord.Main;
 import fr.endoskull.discord.utils.Candidature;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 
-import java.awt.*;
 
 public class ReactListener implements EventListener {
 
@@ -19,26 +18,26 @@ public class ReactListener implements EventListener {
             MessageReactionAddEvent e = (MessageReactionAddEvent) genericEvent;
             Member member = e.getMember();
             String message = e.getMessageId();
-            if (BungeeAddon.getInstance().getWaitingReact().containsKey(message)) {
-                if (BungeeAddon.getInstance().getWaitingReact().get(message).equalsIgnoreCase(member.getId())) {
+            if (Main.getInstance().getWaitingReact().containsKey(message)) {
+                if (Main.getInstance().getWaitingReact().get(message).equalsIgnoreCase(member.getId())) {
                     String reaction = e.getReactionEmote().getAsReactionCode();
                     if (reaction.equalsIgnoreCase("🏹")) {
-                        BungeeAddon.getInstance().getWaitingReact().remove(message);
+                        Main.getInstance().getWaitingReact().remove(message);
                         Candidature.getHelperCandidating().put(member.getIdLong(), 0);
                         Candidature.getHelperChannel().put(member.getIdLong(), e.getChannel().getIdLong());
                         e.getChannel().sendMessageEmbeds(Candidature.getHelperEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("⚡")) {
-                        BungeeAddon.getInstance().getWaitingReact().remove(message);
+                        Main.getInstance().getWaitingReact().remove(message);
                         Candidature.getBuilderCandidating().put(member.getIdLong(), 0);
                         Candidature.getBuilderChannel().put(member.getIdLong(), e.getChannel().getIdLong());
                         e.getChannel().sendMessageEmbeds(Candidature.getBuilderEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("⚙")) {
-                        BungeeAddon.getInstance().getWaitingReact().remove(message);
+                        Main.getInstance().getWaitingReact().remove(message);
                         Candidature.getDevCandidating().put(member.getIdLong(), 0);
                         Candidature.getDevChannel().put(member.getIdLong(), e.getChannel().getIdLong());
                         e.getChannel().sendMessageEmbeds(Candidature.getDevEmbed(member.getIdLong())).queue();
                     } else if (reaction.equalsIgnoreCase("🎨")) {
-                        BungeeAddon.getInstance().getWaitingReact().remove(message);
+                        Main.getInstance().getWaitingReact().remove(message);
                         Candidature.getGraphistCandidating().put(member.getIdLong(), 0);
                         Candidature.getGraphistChannel().put(member.getIdLong(), e.getChannel().getIdLong());
                         e.getChannel().sendMessageEmbeds(Candidature.getGraphistEmbed(member.getIdLong())).queue();

@@ -3,4 +3,4 @@ name: EndoSkullDiscord
 description: Link your discord account to your minecraft account on EndoSkull
 author: BebeDlaStreat
 version: 1.0
-depends: [Spicord, LuckPerms]
+depends: [LuckPerms]

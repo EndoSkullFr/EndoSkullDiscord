@@ -3,7 +3,6 @@ package fr.endoskull.discord.listeners;
 import fr.endoskull.api.commons.account.Account;
 import fr.endoskull.api.commons.account.AccountProvider;
 import fr.endoskull.discord.Main;
-import fr.endoskull.discord.discord.BungeeAddon;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -38,8 +37,7 @@ public class JoinListener implements Listener {
         Account account = AccountProvider.getAccount(player.getUniqueId());
         if (!account.getProperty("discord", "none").equalsIgnoreCase("none")) {
             main.getProxy().getScheduler().runAsync(main, () -> {
-                BungeeAddon addon = BungeeAddon.getInstance();
-                Guild guild = addon.getBot().getJda().getGuildById("819973375903531009");
+                Guild guild = main.getJda().getGuildById("819973375903531009");
                 Member member = guild.retrieveMemberById(account.getProperty("discord")).complete();
                 Role vip = guild.getRoleById("819975366570541147");
                 Role hero = guild.getRoleById("889479964137750589");
